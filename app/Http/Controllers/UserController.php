@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+
 
 class UserController extends Controller
 {
@@ -13,10 +15,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = json_decode(\Illuminate\Support\Facades\File::get(storage_path('users.json')),true); 
-
-        return view('users.index')->with(['users'=>$users]);
-
+        $data= User::all();
+        return view('users.index',['users'=>$data]);
+  
     }
 
     /**
@@ -26,7 +27,10 @@ class UserController extends Controller
      */
     public function create()
     {     
-        return view('users.create');
+                $data= User::all();
+
+ 
+        return view('users.create',['users'=>$data]);
     }
 
     /**
@@ -38,7 +42,17 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-    print_r($request->all());
+        $user = new User;
+ 
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+ 
+        $user->save();
+ 
+        return redirect('users');
+ 
+    // print_r($request->all());
     }
 
     /**
@@ -49,10 +63,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $users = json_decode(\Illuminate\Support\Facades\File::get(storage_path('users.json')),true);
-        
-        $users=$users[$id-1];
-      return view ('users.show')->with(['users' => $users, 'id' => $id]);
+
     }
 
     /**
@@ -63,12 +74,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-    
-            $users = json_decode(\Illuminate\Support\Facades\File::get(storage_path('users.json')),true);
-        
-            $users=$users[$id-1];
-          return view ('users.edit')->with(['users' => $users, 'id' => $id]);
-            
+        $user = User::find($id);
+     return view('users.edit',compact('user'));
             
     }
 
@@ -82,9 +89,14 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         
-
-            $request->all();
-            dd($request->all());
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+ 
+        $user->save();
+        return redirect('users');
+        
            
      
     }
@@ -97,10 +109,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $users = json_decode(\Illuminate\Support\Facades\File::get(storage_path('users.json')),true);
-        
-        $users=$users[$id-1];
-       return"Remove the specified resource with id {{$id}}
-       from storage." ;
+        $user = User::find($id);
+
+        $user->delete();
+
+        return redirect()->route('users.index');
+      
     }
 }

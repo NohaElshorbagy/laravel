@@ -3,6 +3,7 @@
 @section('title','Home')
 @section('content')
 
+
 <table class="table">
   <thead>
     <tr>
@@ -22,13 +23,9 @@
       <td>{{$post['user_id']}}</td>
 
       <td>
-      <a href="{{ route('posts.edit', ['id'=> $post['id']]  )  }}"class="btn btn-primary">Edit</a>
 
-        <form method="POST" action="{{route('posts.destroy' ,['id'=> $post['id']])}}">
-        @csrf
-        @method('DELETE')
-        <button class="btn btn-primary">Delete</button>
-</form>
+      <a href="{{ route('posts.restore' ,['id'=> $post['id'] ] )  }}" class="btn btn-primary">Restore</a>
+
       </td>
     </tr>
    @endforeach

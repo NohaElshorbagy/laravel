@@ -17,13 +17,18 @@
     <tr>
       <!-- <th scope="row">1</th> -->
       <td>{{$user['id']}}</td>
-      <td><a href="{{ route('users.show',  $user['id'] )  }}">{{$user['name']}}</a></td>
+      <td><a href=" route('users.show', ['id'=> $user['id']]  ) ">{{$user['name']}}</a></td>
       <td>{{$user['email']}}</td>
       <!-- <td>{{$user['name']}}</td> -->
       <!-- <td>Otto</td> -->
       <td>
-        <a href="{{ route('users.edit',  $user['id'] )  }}"class="btn btn-primary">Edit</a>
-        <a href="{{route('users.destroy',  $user['id'] )}}"class="btn btn-primary">Delete</a>
+      <a href="{{ route('users.edit', ['id'=> $user['id']]  )  }}"class="btn btn-primary">Edit</a>
+
+        <form method="POST" action="{{route('users.destroy' ,['id'=> $user['id']])}}">
+        @csrf
+        @method('DELETE')
+        <button class="btn btn-primary">Delete</button>
+</form>
       </td>
     </tr>
    @endforeach
